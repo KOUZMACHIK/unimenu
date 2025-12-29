@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beezy Tips - Categories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #18181b;
+            color: #ffffff;
+            padding-top: 62px;
+            padding-bottom: 50px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        body.light-mode {
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .header {
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        body.light-mode .lang-selector {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .category-card {
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body.light-mode .category-title {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .lang-selector:focus {
+            outline: 2px solid #000000;
+            outline-offset: 2px;
+        }
+
+        body.light-mode .home-button {
+            color: #6c757d;
+        }
+
+        body.light-mode .home-button:hover {
+            color: #1a1a1a;
+        }
+
+        .header {
+            background-color: #27272a;
+            padding: 6px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-image {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-image-light {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            display: none;
+        }
+
+        body.light-mode .logo-image {
+            display: none;
+        }
+
+        body.light-mode .logo-image-light {
+            display: block;
+        }
+
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle-switch {
+            width: 60px;
+            height: 28px;
+            background-color: #3a3a3a;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        body.light-mode .theme-toggle-switch {
+            background-color: #e0e0e0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background-color: #4a5fd9;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.light-mode .toggle-slider {
+            transform: translateX(32px);
+        }
+
+        .toggle-icon {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .theme-toggle-switch:hover {
+            transform: scale(1.05);
+        }
+
+        .lang-selector {
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        .lang-selector:focus {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-card {
+            background-color: #27272a;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .category-content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-description {
+            color: #a1a1aa;
+            font-size: 1rem;
+        }
+
+        body.light-mode .category-description {
+            color: #6c757d;
+        }
+
+        /* Bottom Navbar */
+        .home-button-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            background-color: #27272a;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            padding: 0;
+        }
+
+        body.light-mode .home-button-container {
+            background-color: #ffffff;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .home-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            padding: 6px 40px;
+            background-color: transparent;
+            color: #a1a1aa;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .home-button:hover {
+            color: #fff;
+        }
+
+        body.light-mode .home-button {
+            color: #6c757d;
+        }
+
+        body.light-mode .home-button:hover {
+            color: #1a1a1a;
+        }
+
+        .home-icon {
+            font-size: 22px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .category-image {
+                height: 200px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            body {
+                padding-top: 90px;
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .logo-image,
+            .logo-image-light {
+                height: 70px;
+            }
+
+            .theme-toggle-switch {
+                width: 70px;
+                height: 32px;
+            }
+
+            .toggle-slider {
+                width: 26px;
+                height: 26px;
+            }
+
+            body.light-mode .toggle-slider {
+                transform: translateX(38px);
+            }
+
+            .toggle-icon {
+                font-size: 16px;
+            }
+
+            .lang-selector {
+                font-size: 16px;
+                padding: 5px 8px;
+            }
+
+            .home-button {
+                gap: 2px;
+                padding: 8px 40px;
+                font-size: 12px;
+            }
+
+            .home-icon {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="theme-toggle-container">
+            <div class="theme-toggle-switch" id="themeToggle">
+                <div class="toggle-slider">
+                    <span class="toggle-icon">☾</span>
+                </div>
+            </div>
+        </div>
+        <div class="logo">
+            <img src="unilogo.png" alt="Logo" class="logo-image">
+            <img src="unilogoblue.png" alt="Logo" class="logo-image-light">
+        </div>
+        <select class="lang-selector" id="langSelector">
+            <option value="en">🇬🇧 EN</option>
+            <option value="gr">🇬🇷 GR</option>
+            <option value="ru">🇷🇺 RU</option>
+        </select>
+    </header>
+
+    <main class="main-content">
+        <h1 class="page-title">Our Menu</h1>
+        
+        <div class="categories-grid">
+            <a href="meals.html" class="category-card">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop" alt="Meals" class="category-image">
+                <div class="category-content">
+                    <h2 class="category-title">Meals</h2>
+                </div>
+            </a>
+
+            <a href="snacks.html" class="category-card">
+                <img src="https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=600&h=400&fit=crop" alt="Snacks" class="category-image">
+                <div class="category-content">
+                    <h2 class="category-title">Snacks</h2>
+                </div>
+            </a>
+
+            <a href="drinks.html" class="category-card">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=400&fit=crop" alt="Drinks" class="category-image">
+                <div class="category-content">
+                    <h2 class="category-title">Drinks</h2>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <div class="home-button-container">
+        <a href="index.html" class="home-button">
+            <span class="home-icon">⌂</span>
+            <span>Home</span>
+        </a>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const toggleIcon = document.querySelector('.toggle-icon');
+        const body = document.body;
+        
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            toggleIcon.textContent = '☼';
+        }
+
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('light-mode');
+            
+            if (body.classList.contains('light-mode')) {
+                toggleIcon.textContent = '☼';
+                localStorage.setItem('theme', 'light');
+            } else {
+                toggleIcon.textContent = '☾';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        const translations = {
+            en: {
+                title: 'Our Menu',
+                meals: { title: 'Meals', desc: 'Delicious main courses and hearty dishes' },
+                snacks: { title: 'Snacks', desc: 'Light bites and appetizers' },
+                drinks: { title: 'Drinks', desc: 'Refreshing beverages and cocktails' },
+                home: 'Home'
+            },
+            gr: {
+                title: 'Το Μενού Μας',
+                meals: { title: 'Γεύματα', desc: 'Νόστιμα κύρια πιάτα και χορταστικά φαγητά' },
+                snacks: { title: 'Σνακ', desc: 'Ελαφριά μπουκιές και ορεκτικά' },
+                drinks: { title: 'Ποτά', desc: 'Αναζωογονητικά ροφήματα και κοκτέιλ' },
+                home: 'Αρχική'
+            },
+            ru: {
+                title: 'Наше Меню',
+                meals: { title: 'Блюда', desc: 'Вкусные основные блюда' },
+                snacks: { title: 'Закуски', desc: 'Легкие закуски и аперитивы' },
+                drinks: { title: 'Напитки', desc: 'Освежающие напитки и коктейли' },
+                home: 'Главная'
+            }
+        };
+
+        const langSelector = document.getElementById('langSelector');
+        
+        langSelector.addEventListener('change', (e) => {
+            const lang = e.target.value;
+            translatePage(lang);
+        });
+
+        function translatePage(lang) {
+            const trans = translations[lang];
+            if (!trans) return;
+
+            document.querySelector('.page-title').textContent = trans.title;
+            
+            const cards = document.querySelectorAll('.category-card');
+            cards[0].querySelector('.category-title').textContent = trans.meals.title;
+            cards[0].querySelector('.category-description').textContent = trans.meals.desc;
+            
+            cards[1].querySelector('.category-title').textContent = trans.snacks.title;
+            cards[1].querySelector('.category-description').textContent = trans.snacks.desc;
+            
+            cards[2].querySelector('.category-title').textContent = trans.drinks.title;
+            cards[2].querySelector('.category-description').textContent = trans.drinks.desc;
+
+            document.querySelector('.home-button span:last-child').textContent = trans.home;
+        }
+    </script>
+</body>
+</html>

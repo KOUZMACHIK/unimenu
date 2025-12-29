@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beezy Tips - Snacks</title>
+    <style>
+        html {
+            overflow-x: hidden;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #18181b;
+            color: #ffffff;
+            padding-top: 62px;
+            padding-bottom: 50px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        body.light-mode {
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .header {
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        body.light-mode .lang-selector {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .menu-card {
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body.light-mode .card-title {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .card-price {
+            color: #000000;
+        }
+
+        body.light-mode .lang-selector:focus {
+            outline: 2px solid #000000;
+            outline-offset: 2px;
+        }
+
+        body.light-mode .home-button {
+            color: #6c757d;
+        }
+
+        body.light-mode .home-button:hover {
+            color: #1a1a1a;
+        }
+
+        .header {
+            background-color: #27272a;
+            padding: 6px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-image {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-image-light {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            display: none;
+        }
+
+        body.light-mode .logo-image {
+            display: none;
+        }
+
+        body.light-mode .logo-image-light {
+            display: block;
+        }
+
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle-switch {
+            width: 60px;
+            height: 28px;
+            background-color: #3a3a3a;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        body.light-mode .theme-toggle-switch {
+            background-color: #e0e0e0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background-color: #4a5fd9;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.light-mode .toggle-slider {
+            transform: translateX(32px);
+        }
+
+        .toggle-icon {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .theme-toggle-switch:hover {
+            transform: scale(1.05);
+        }
+
+        .lang-selector {
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        .lang-selector:focus {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 20px 15px;
+        }
+
+        .menu-card {
+            background-color: #27272a;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .card-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Bottom Navbar */
+        .home-button-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            background-color: #27272a;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            padding: 0;
+        }
+
+        body.light-mode .home-button-container {
+            background-color: #ffffff;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .home-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            padding: 6px 40px;
+            background-color: transparent;
+            color: #a1a1aa;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .home-button:hover {
+            color: #fff;
+        }
+
+        body.light-mode .home-button {
+            color: #6c757d;
+        }
+
+        body.light-mode .home-button:hover {
+            color: #1a1a1a;
+        }
+
+        .home-icon {
+            font-size: 22px;
+        }
+
+        @media (max-width: 480px) {
+            .menu-grid {
+                gap: 10px;
+                padding: 20px 10px;
+            }
+
+            .card-image {
+                height: 120px;
+            }
+
+            .card-title {
+                font-size: 14px;
+            }
+
+            .card-price {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 600px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1200px;
+                margin: 0 auto;
+                gap: 20px;
+                padding: 20px 20px;
+            }
+
+            .card-image {
+                height: 180px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            body {
+                padding-top: 90px;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .logo-image,
+            .logo-image-light {
+                height: 70px;
+            }
+
+            .theme-toggle-switch {
+                width: 70px;
+                height: 32px;
+            }
+
+            .toggle-slider {
+                width: 26px;
+                height: 26px;
+            }
+
+            body.light-mode .toggle-slider {
+                transform: translateX(38px);
+            }
+
+            .toggle-icon {
+                font-size: 16px;
+            }
+
+            .lang-selector {
+                font-size: 16px;
+                padding: 5px 8px;
+            }
+
+            .home-button {
+                gap: 2px;
+                padding: 8px 40px;
+                font-size: 12px;
+            }
+
+            .home-icon {
+                font-size: 28px;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .menu-grid {
+                grid-template-columns: repeat(5, 1fr);
+                max-width: 1400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="theme-toggle-container">
+            <div class="theme-toggle-switch" id="themeToggle">
+                <div class="toggle-slider">
+                    <span class="toggle-icon">☾</span>
+                </div>
+            </div>
+        </div>
+        <div class="logo">
+            <img src="unilogo.png" alt="Logo" class="logo-image">
+            <img src="unilogoblue.png" alt="Logo" class="logo-image-light">
+        </div>
+        <select class="lang-selector" id="langSelector">
+            <option value="en">🇬🇧 EN</option>
+            <option value="gr">🇬🇷 GR</option>
+            <option value="ru">🇷🇺 RU</option>
+        </select>
+    </header>
+
+    <div class="menu-grid">
+        <!-- Appetizers -->
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?w=400&h=300&fit=crop" alt="Bruschetta" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Bruschetta">Bruschetta</div>
+                <div class="card-price">7€</div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=400&h=300&fit=crop" alt="Nachos" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Nachos">Nachos</div>
+                <div class="card-price">8€</div>
+            </div>
+        </div>
+
+       
+
+        <!-- Snacks -->
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1618164435735-413d3b066c9a?w=400&h=300&fit=crop" alt="Onion Rings" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Onion Rings">Onion Rings</div>
+                <div class="card-price">5.5€</div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=300&fit=crop" alt="Spring Rolls" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Spring Rolls">Spring Rolls</div>
+                <div class="card-price">6€</div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&h=300&fit=crop" alt="Calamari" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Calamari">Calamari</div>
+                <div class="card-price">10€</div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1625944230945-1b7dd3b949ab?w=400&h=300&fit=crop" alt="Popcorn Chicken" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Popcorn Chicken">Popcorn Chicken</div>
+                <div class="card-price">7.5€</div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1580013759032-c96505e24c1f?w=400&h=300&fit=crop" alt="Chips & Salsa" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Chips & Salsa">Chips & Salsa</div>
+                <div class="card-price">5€</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-button-container">
+        <a href="index.html" class="home-button">
+            <span class="home-icon">⌂</span>
+            <span>Home</span>
+        </a>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const toggleIcon = document.querySelector('.toggle-icon');
+        const body = document.body;
+        
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            toggleIcon.textContent = '☼';
+        }
+
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('light-mode');
+            
+            if (body.classList.contains('light-mode')) {
+                toggleIcon.textContent = '☼';
+                localStorage.setItem('theme', 'light');
+            } else {
+                toggleIcon.textContent = '☾';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Language Translation
+        const translations = {
+            en: {
+                items: {
+                    'Bruschetta': 'Bruschetta',
+                    'Nachos': 'Nachos',
+                    'Mozzarella Sticks': 'Mozzarella Sticks',
+                    'Chicken Wings': 'Chicken Wings',
+                    'French Fries': 'French Fries',
+                    'Sweet Potato Fries': 'Sweet Potato Fries',
+                    'Potato Wedges': 'Potato Wedges',
+                    'Onion Rings': 'Onion Rings',
+                    'Spring Rolls': 'Spring Rolls',
+                    'Calamari': 'Calamari',
+                    'Popcorn Chicken': 'Popcorn Chicken',
+                    'Chips & Salsa': 'Chips & Salsa'
+                }
+            },
+            gr: {
+                items: {
+                    'Bruschetta': 'Μπρουσκέτα',
+                    'Nachos': 'Νάτσος',
+                    'Mozzarella Sticks': 'Μοτσαρέλα Στικς',
+                    'Chicken Wings': 'Φτερούγες Κοτόπουλου',
+                    'French Fries': 'Τηγανητές Πατάτες',
+                    'Sweet Potato Fries': 'Γλυκοπατάτες Τηγανητές',
+                    'Potato Wedges': 'Πατάτες Ουέτζες',
+                    'Onion Rings': 'Κρίκοι Κρεμμυδιού',
+                    'Spring Rolls': 'Σπρινγκ Ρολς',
+                    'Calamari': 'Καλαμαράκια',
+                    'Popcorn Chicken': 'Κοτόπουλο Ποπ Κορν',
+                    'Chips & Salsa': 'Τσιπς & Σάλσα'
+                }
+            },
+            ru: {
+                items: {
+                    'Bruschetta': 'Брускетта',
+                    'Nachos': 'Начос',
+                    'Mozzarella Sticks': 'Палочки Моцарелла',
+                    'Chicken Wings': 'Куриные Крылышки',
+                    'French Fries': 'Картофель Фри',
+                    'Sweet Potato Fries': 'Фри из Батата',
+                    'Potato Wedges': 'Картофельные Дольки',
+                    'Onion Rings': 'Луковые Кольца',
+                    'Spring Rolls': 'Спринг Роллы',
+                    'Calamari': 'Кальмары',
+                    'Popcorn Chicken': 'Попкорн Чикен',
+                    'Chips & Salsa': 'Чипсы и Сальса'
+                }
+            }
+        };
+
+        const langSelector = document.getElementById('langSelector');
+        
+        langSelector.addEventListener('change', (e) => {
+            const lang = e.target.value;
+            translatePage(lang);
+        });
+
+        function translatePage(lang) {
+            const trans = translations[lang];
+            if (!trans) return;
+
+            const itemTitles = document.querySelectorAll('.card-title');
+            itemTitles.forEach(title => {
+                const originalText = title.getAttribute('data-original');
+                if (originalText && trans.items[originalText]) {
+                    title.textContent = trans.items[originalText];
+                }
+            });
+        }
+    </script>
+</body>
+</html>

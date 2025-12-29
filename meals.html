@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beezy Tips - Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #18181b;
+            color: #ffffff;
+            padding-bottom: 50px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        body.light-mode {
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        body.light-mode .header {
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        body.light-mode .lang-selector {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .menu-card {
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body.light-mode .card-title {
+            color: #1a1a1a;
+        }
+
+        body.light-mode .bottom-nav {
+            background-color: #ffffff;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        body.light-mode .nav-item {
+            color: #6c757d;
+        }
+
+        body.light-mode .nav-item.active {
+            background-color: #16a34a;
+            color: #fff;
+        }
+
+        body.light-mode .category-btn {
+            color: #6c757d;
+        }
+
+        body.light-mode .category-btn.active {
+            color: #16a34a;
+            border-bottom: 2px solid #16a34a;
+        }
+
+        .header {
+            background-color: #27272a;
+            padding: 6px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-image {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-image-light {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            display: none;
+        }
+
+        body.light-mode .logo-image {
+            display: none;
+        }
+
+        body.light-mode .logo-image-light {
+            display: block;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+        }
+
+        .theme-toggle-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle-switch {
+            width: 60px;
+            height: 28px;
+            background-color: #3a3a3a;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        body.light-mode .theme-toggle-switch {
+            background-color: #e0e0e0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background-color: #4a5fd9;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.light-mode .toggle-slider {
+            transform: translateX(32px);
+        }
+
+        .toggle-icon {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .theme-toggle-switch:hover {
+            transform: scale(1.05);
+        }
+
+        .lang-selector {
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        .lang-selector:focus {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+
+        body.light-mode .lang-selector:focus {
+            outline: 2px solid #000000;
+            outline-offset: 2px;
+        }
+
+        .categories {
+            display: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-btn {
+            padding: 8px 20px;
+            background-color: transparent;
+            color: #a1a1aa;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .category-btn.active {
+            color: #22c55e;
+            border-bottom: 2px solid #22c55e;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 15px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .menu-card {
+            background-color: #27272a;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .menu-card.hide {
+            display: none;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .card-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        body.light-mode .card-price {
+            color: #000000;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            background-color: #27272a;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            color: #a1a1aa;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-item.active {
+            background-color: #22c55e;
+            color: #fff;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        /* Bottom Navbar */
+        .home-button-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            background-color: #27272a;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            padding: 0;
+        }
+
+        body.light-mode .home-button-container {
+            background-color: #ffffff;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .home-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            padding: 6px 40px;
+            background-color: transparent;
+            color: #a1a1aa;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .home-button:hover {
+            color: #fff;
+        }
+
+        body.light-mode .home-button {
+            color: #6c757d;
+        }
+
+        body.light-mode .home-button:hover {
+            color: #1a1a1a;
+        }
+
+        .home-icon {
+            font-size: 22px;
+        }
+
+        @media (max-width: 480px) {
+            .menu-grid {
+                gap: 10px;
+                padding: 0 10px;
+            }
+
+            .card-image {
+                height: 120px;
+            }
+
+            .card-title {
+                font-size: 14px;
+            }
+
+            .card-price {
+                font-size: 16px;
+            }
+        }
+
+        @media (min-width: 600px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1200px;
+                margin: 0 auto;
+                gap: 20px;
+                padding: 0 20px;
+            }
+
+            .card-image {
+                height: 180px;
+            }
+
+            .bottom-nav {
+                display: none;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .logo-image,
+            .logo-image-light {
+                height: 70px;
+            }
+
+            .theme-toggle-switch {
+                width: 70px;
+                height: 32px;
+            }
+
+            .toggle-slider {
+                width: 26px;
+                height: 26px;
+            }
+
+            body.light-mode .toggle-slider {
+                transform: translateX(38px);
+            }
+
+            .toggle-icon {
+                font-size: 16px;
+            }
+
+            .lang-selector {
+                font-size: 16px;
+                padding: 5px 8px;
+            }
+
+            .home-button {
+                gap: 2px;
+                padding: 8px 40px;
+                font-size: 12px;
+            }
+
+            .home-icon {
+                font-size: 28px;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .menu-grid {
+                grid-template-columns: repeat(5, 1fr);
+                max-width: 1400px;
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .menu-card:active {
+                transform: scale(0.98);
+            }
+
+            .category-btn {
+                padding: 10px 24px;
+                min-height: 44px;
+            }
+
+            .nav-item {
+                min-height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="theme-toggle-container">
+            <div class="theme-toggle-switch" id="themeToggle">
+                <div class="toggle-slider">
+                    <span class="toggle-icon">☾</span>
+                </div>
+            </div>
+        </div>
+        <div class="logo">
+            <img src="unilogo.png" alt="Logo" class="logo-image">
+            <img src="unilogoblue.png" alt="Logo" class="logo-image-light">
+        </div>
+        <select class="lang-selector" id="langSelector">
+            <option value="en">🇬🇧 EN</option>
+            <option value="gr">🇬🇷 GR</option>
+            <option value="ru">🇷🇺 RU</option>
+        </select>
+    </header>
+
+    <div class="menu-grid">
+        <!-- Breakfast Items -->
+        <div class="menu-card" data-category="breakfast">
+            <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&h=300&fit=crop" alt="Breakfast Plate" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Breakfast Plate">Breakfast Plate</div>
+                <div class="card-price">29€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+            <img src="https://images.unsplash.com/photo-1525351326368-efbb5cb6814d?w=400&h=300&fit=crop" alt="Scramble" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Scramble">Scramble</div>
+                <div class="card-price">19€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+            <img src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=400&h=300&fit=crop" alt="Sunny side-ups" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Sunny side-ups">Sunny side-ups</div>
+                <div class="card-price">19€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+            <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=300&fit=crop" alt="Plain Croissant" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Plain Croissant">Plain Croissant</div>
+                <div class="card-price">4.5€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+            <img src="https://images.unsplash.com/photo-1623334044303-241021148842?w=400&h=300&fit=crop" alt="Chocolate Croissant" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Chocolate Croissant">Chocolate Croissant</div>
+                <div class="card-price">6€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop" alt="Almond Croissant" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Almond Croissant">Almond Croissant</div>
+                <div class="card-price">7€</div>
+            </div>
+        </div>
+
+        <!-- Winter Menu Items -->
+        <div class="menu-card" data-category="winter">
+            <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop" alt="Hot Chocolate" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Hot Chocolate">Hot Chocolate</div>
+                <div class="card-price">12€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="winter">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop" alt="Mulled Wine" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Mulled Wine">Mulled Wine</div>
+                <div class="card-price">15€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="winter">
+            <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=300&fit=crop" alt="Roasted Chestnuts" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Roasted Chestnuts">Roasted Chestnuts</div>
+                <div class="card-price">8€</div>
+            </div>
+        </div>
+
+        <!-- Soups -->
+        <div class="menu-card" data-category="soups">
+            <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop" alt="Tomato Soup" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Tomato Soup">Tomato Soup</div>
+                <div class="card-price">14€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="soups">
+            <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop" alt="Mushroom Soup" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Mushroom Soup">Mushroom Soup</div>
+                <div class="card-price">16€</div>
+            </div>
+        </div>
+
+        <div class="menu-card" data-category="soups">
+            <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop" alt="Chicken Soup" class="card-image">
+            <div class="card-content">
+                <div class="card-title" data-original="Chicken Soup">Chicken Soup</div>
+                <div class="card-price">15€</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-button-container">
+        <a href="index.html" class="home-button">
+            <span class="home-icon">⌂</span>
+            <span>Home</span>
+        </a>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const toggleIcon = document.querySelector('.toggle-icon');
+        const body = document.body;
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            toggleIcon.textContent = '☼';
+        }
+
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('light-mode');
+            
+            if (body.classList.contains('light-mode')) {
+                toggleIcon.textContent = '☼';
+                localStorage.setItem('theme', 'light');
+            } else {
+                toggleIcon.textContent = '☾';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Category filtering removed - show all items
+        const menuCards = document.querySelectorAll('.menu-card');
+        menuCards.forEach(card => {
+            card.classList.remove('hide');
+        });
+
+        // Language Translation
+        const translations = {
+            en: {
+                categories: ['BREAKFAST 09:00-12:00', 'WINTER MENU', 'SOUPS'],
+                menuButton: 'Menu',
+                items: {
+                    'Breakfast Plate': 'Breakfast Plate',
+                    'Scramble': 'Scramble',
+                    'Sunny side-ups': 'Sunny side-ups',
+                    'Plain Croissant': 'Plain Croissant',
+                    'Chocolate Croissant': 'Chocolate Croissant',
+                    'Almond Croissant': 'Almond Croissant',
+                    'Hot Chocolate': 'Hot Chocolate',
+                    'Mulled Wine': 'Mulled Wine',
+                    'Roasted Chestnuts': 'Roasted Chestnuts',
+                    'Tomato Soup': 'Tomato Soup',
+                    'Mushroom Soup': 'Mushroom Soup',
+                    'Chicken Soup': 'Chicken Soup'
+                }
+            },
+            gr: {
+                categories: ['ΠΡΩΙΝΟ 09:00-12:00', 'ΧΕΙΜΕΡΙΝΟ ΜΕΝΟΥ', 'ΣΟΥΠΕΣ'],
+                menuButton: 'Μενού',
+                items: {
+                    'Breakfast Plate': 'Πιάτο Πρωινού',
+                    'Scramble': 'Ομελέτα',
+                    'Sunny side-ups': 'Αυγά Μάτια',
+                    'Plain Croissant': 'Κρουασάν',
+                    'Chocolate Croissant': 'Κρουασάν Σοκολάτας',
+                    'Almond Croissant': 'Κρουασάν Αμυγδάλου',
+                    'Hot Chocolate': 'Ζεστή Σοκολάτα',
+                    'Mulled Wine': 'Κρασί με Μπαχαρικά',
+                    'Roasted Chestnuts': 'Ψητά Κάστανα',
+                    'Tomato Soup': 'Σούπα Ντομάτας',
+                    'Mushroom Soup': 'Σούπα Μανιταριών',
+                    'Chicken Soup': 'Κοτόσουπα'
+                }
+            },
+            ru: {
+                categories: ['ЗАВТРАК 09:00-12:00', 'ЗИМНЕЕ МЕНЮ', 'СУПЫ'],
+                menuButton: 'Меню',
+                items: {
+                    'Breakfast Plate': 'Завтрак',
+                    'Scramble': 'Яичница-болтунья',
+                    'Sunny side-ups': 'Яичница',
+                    'Plain Croissant': 'Круассан',
+                    'Chocolate Croissant': 'Шоколадный круассан',
+                    'Almond Croissant': 'Миндальный круассан',
+                    'Hot Chocolate': 'Горячий шоколад',
+                    'Mulled Wine': 'Глинтвейн',
+                    'Roasted Chestnuts': 'Жареные каштаны',
+                    'Tomato Soup': 'Томатный суп',
+                    'Mushroom Soup': 'Грибной суп',
+                    'Chicken Soup': 'Куриный суп'
+                }
+            }
+        };
+
+        const langSelector = document.getElementById('langSelector');
+        
+        langSelector.addEventListener('change', (e) => {
+            const lang = e.target.value;
+            translatePage(lang);
+        });
+
+        function translatePage(lang) {
+            const trans = translations[lang];
+            
+            if (!trans) return;
+
+            // Translate menu items
+            const itemTitles = document.querySelectorAll('.card-title');
+            itemTitles.forEach(title => {
+                const originalText = title.getAttribute('data-original');
+                if (originalText && trans.items[originalText]) {
+                    title.textContent = trans.items[originalText];
+                }
+            });
+        }
+    </script>
+</body>
+</html>
